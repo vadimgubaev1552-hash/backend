@@ -5,6 +5,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../src/Calculator.php';
 require_once __DIR__ . '/../src/Bitrix24Service.php';
+require_once __DIR__ . '/../src/OpenRouterService.php';
 
 try {
     $input = json_decode(file_get_contents('php://input'), true);
@@ -45,8 +46,9 @@ function handleAnalyze(array $input): void {
         throw new Exception('Загрузите хотя бы одно фото');
     }
 
-    $calculator = new Calculator();
-    $result = $calculator->calculate($formData);
+    // AI сервис возвращает готовый результат
+    $openRouter = new OpenRouterService();
+    $result = $openRouter->analyzeImages($images, $formData);
 
     echo json_encode([
         'success' => true,
